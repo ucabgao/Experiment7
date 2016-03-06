@@ -1,0 +1,43 @@
+doctype 5
+
+pages  = ["Home", "About", "FAQ", "Contact"]
+
+if auth
+	- pages.splice(1, 0, "Profile");
+	- pages.splice(5, 0, "Logout");
+
+html
+	head
+		title= "PairIDE - " + title
+		meta(name='viewport', content="width=device-width, intial-scale=1.0")
+		link(rel='stylesheet', href='/stylesheets/darkstrap.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		block links
+
+		block scripts
+			script(src="/js/jquery.js")
+
+	body
+
+		block wrapper
+			.container-narrow
+
+				block header
+					.masthead
+						ul.nav.nav-pills.pull-right
+							each page in pages
+								if current == page
+									li.active
+										a('href'=page.toLowerCase()) #{page}
+								else
+									li
+										a('href'=page.toLowerCase()) #{page}
+						h3.muted
+							a(href="/").home_link
+								|Pair
+							a(href="/").home_link_highlight
+								|IDE
+					hr
+				block content
+				hr
+				include global-footer

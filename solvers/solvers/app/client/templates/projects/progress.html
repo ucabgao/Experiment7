@@ -1,0 +1,37 @@
+<template name="progress">
+	<div class="row">
+		<div class="col-md-12 project-status">
+			<div class="progress-title">Project status:
+				{{projectStatus}}
+			</div>
+		</div>
+		{{> progress_bar}}
+	</div>
+</template>
+<template name="progress_editable">
+	<div class="row">
+		<div class="col-md-12 project-status">
+			<div class="progress-title">Project status:
+				<div class="btn-group">
+				  <button type="button" class="btn btn-default btn-xs dropdown-toggle project-status" data-toggle="dropdown">
+				    {{projectStatus}} <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu project-status" role="menu">
+				    <li><a href class="ready">Ready for Solvers</a></li>
+				    <li><a href class="tasks">In Progress</a></li>
+				    <li><a href class="solved">Project Solved!</a></li>
+				  </ul>
+				</div>	
+			</div>
+		</div>
+		{{> progress_bar}}
+	</div>
+</template>
+<template name="progress_bar">
+	<div class="col-md-12">
+		<div class="progress progress-striped">
+			<div class="progress-bar progress-bar-success" style="width: {{statusCompletion}}%;">
+			</div>
+		</div>
+	</div>
+</template>

@@ -1,0 +1,39 @@
+extends ../../../views/layout
+include ../../members/views/memberlist-mixin
+
+block title
+    | #{group.longName}
+
+block content
+  .row-fluid
+    .span12
+      .page-header
+        h2 #{group.longName}&nbsp; 
+          small #{group.type} 
+            if (user && user.member.isAdmin)
+              a.pull-right.btn(href="/groups/edit/#{group.id}", title="Bearbeiten"): i.icon-edit
+            a.btn.pull-right(href="/mailarchive/list/#{group.id}?thread=true") Mailarchiv
+            a.btn.pull-right(href="/wiki/#{group.id}/"): i.icon-book &nbsp;Wiki
+      p
+        strong
+          | Adresse:
+        | 
+        a(href="mailto:#{group.id}@softwerkskammer.org")
+          | #{group.id}@softwerkskammer.org
+      |!{group.descriptionHTML()}
+
+      h4 Mitglieder:
+      | Diese Gruppe hat
+      if (users.length === 1)
+        |  ein Mitglied.
+      else if (users.length === 0)
+        |  keine Mitglieder.
+      else
+        |  #{users.length} Mitglieder.
+      if (user)
+        mixin memberlist(users, organizers)
+        if (user)
+          if (userIsGroupMember)
+            a.btn.btn-primary(href="unsubscribe/#{group.id}") Gruppe verlassen
+          else
+            a.btn.btn-primary(href="subscribe/#{group.id}") Gruppe beitreten

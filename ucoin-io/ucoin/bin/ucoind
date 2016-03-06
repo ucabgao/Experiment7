@@ -1,0 +1,704 @@
+#!/usr/bin/env node
+var async       = require('async');
+var _           = require('underscore');
+var program     = require('commander');
+var mongoose    = require('mongoose');
+var vucoin      = require('vucoin');
+var wizard      = require('../app/lib/wizard');
+var router      = require('../app/lib/streams/router');
+var multicaster = require('../app/lib/streams/multicaster');
+var logger      = require('../app/lib/logger')('ucoind');
+var signature   = require('../app/lib/signature');
+var crypto      = require('../app/lib/crypto');
+var base58      = require('../app/lib/base58');
+var constants   = require('../app/lib/constants');
+var Synchroniser = require('../app/lib/sync');
+var pjson       = require('../package.json');
+var ucoin       = require('./../');
+
+function keys (val) {
+  return val.split(',');
+}
+
+program
+  .version(pjson.version)
+  .usage('<command> [options]')
+  .option('-p, --port <port>',         'Port to listen for requests', parseInt)
+  .option('-c, --currency <name>',     'Name of the currency managed by this node.')
+  .option('--mhost <host>',            'MongoDB host.')
+  .option('--mport <port>',            'MongoDB port.')
+  .option('-d, --mdb <name>',          'MongoDB database name (defaults to "ucoin_default").')
+  .option('--salt <salt>',             'Key salt to generate this key\'s secret key')
+  .option('--passwd <password>',       'Password to generate this key\'s secret key')
+  .option('--ipv4 <address>',          'IPV4 interface to listen for requests')
+  .option('--ipv6 <address>',          'IPV6 interface to listen for requests')
+  .option('--remoteh <host>',          'Remote interface others may use to contact this node')
+  .option('--remote4 <host>',          'Remote interface for IPv4 access')
+  .option('--remote6 <host>',          'Remote interface for IPv6 access')
+  .option('--remotep <port>',          'Remote port others may use to contact this node')
+  .option('--sigDelay <timestamp>',    'Minimum delay between 2 similar certifications, in seconds.')
+  .option('--sigValidity <timestamp>', 'Validity duration of a certification, in seconds.')
+  .option('--msValidity <timestamp>',  'Validity duration of a memberships, in seconds.')
+  .option('--sigQty <number>',         'Minimum number of required certifications to be a member/stay as a member')
+  .option('--medtblocks <number>',     'medianTimeBlocks parameter of UCP')
+  .option('--avgGenTime <number>',     'avgGenTime parameter of UCP')
+  .option('--dtdiffeval <number>',     'dtDiffEval parameter of UCP')
+  .option('--powZeroMin <number>',     'Minimum number of leading zeros for a proof-of-work')
+  .option('--powPeriod <number>',      'Number of blocks to wait to decrease proof-of-work difficulty by one')
+  .option('--powDelay <number>',       'Number of seconds to wait before starting the computation of next block')
+  .option('--participate <Y|N>',       'Participate to writing the blockchain')
+  .option('--upnp',                    'Use UPnP to open remote port')
+  .option('--noupnp',                  'Do not use UPnP to open remote port')
+  .option('--tsInterval <number>',     'Number of seconds as acceptable offset when receiving a block')
+  .option('--growth <number>',         'Universal Dividend %growth. Aka. \'c\' parameter in RMT')
+  .option('--ud0 <number>',            'Universal Dividend initial value')
+  .option('--dt <number>',             'Number of seconds between two UD')
+  .option('--udid2',                   'Enable udid2 format for user id')
+  .option('--rootoffset <number>',     'Allow to give a time offset for first block (offset in the past)')
+  .option('--cpu <percent>',           'Percent of CPU usage for proof-of-work computation', parsePercent)
+  .option('--show',                    'With gen-next or gen-root commands, displays the generated block')
+  .option('--member',                  'With `bootstrap` command, ensures we have a member keypair')
+  .option('--httplogs',                'Enable HTTP logs')
+  .option('--nohttplogs',              'Disable HTTP logs')
+  ;
+
+program
+  .command('start')
+  .description('Start uCoin server.')
+  .action(service(ucoin.createTxServer, serverStart));
+
+program
+  .command('wizard [step]')
+  .description('Launch the configuration Wizard')
+  .action(function (step) {
+    // Only show message "Saved"
+    require('log4js').configure({
+      "appenders": [{
+        category: "ucoind",
+        type: "console"
+      }]
+    });
+    connect(function(step, server, conf){
+      async.series([
+        function(next) {
+          startWizard(step, server, conf, next);
+        }
+      ], logIfErrorAndExit(server));
+    })(step, null);
+  });
+
+program
+  .command('sync [host] [port]')
+  .description('Synchronize blockchain from a remote uCoin node')
+  .action(service(ucoin.createTxServer, function (host, port, server, conf) {
+
+    async.series([
+      function (next){
+        // Synchronize
+        var remote = new Synchroniser(server, host, port, conf);
+        remote.sync(next);
+      }
+    ], logIfErrorAndExit(server, 'Error during sync: '));
+  }));
+
+program
+  .command('bootstrap [host] [port]')
+  .description('Synchronize blockchain from a remote uCoin node')
+  .action(service(ucoin.createTxServer, bootstrapServer));
+
+program
+  .command('forward [fromBlock] [host] [port]')
+  .description('Forward local blockchain to a remote uCoin node')
+  .action(service(ucoin.createTxServer, function (fromBlock, host, port, server, conf) {
+
+    async.waterfall([
+      function (next) {
+        var Block = server.conn.model('Block');
+        Block.from(fromBlock, next);
+      },
+      function (blocks, next){
+        // Forward
+        var Peer = server.conn.model('Peer');
+        var peer = new Peer({
+          endpoints: [['BASIC_MERKLED_API', host, port].join(' ')]
+        });
+        async.forEachSeries(blocks, function (block, callback) {
+          logger.info("Forwarding block#" + block.number);
+          multicaster().sendBlock(peer, block, callback);
+        }, next);
+      },
+    ], function (err) {
+      if(err){
+        logger.error('Error during forwarding:', err);
+      }
+      server.disconnect();
+      process.exit();
+    });
+  }));
+
+program
+  .command('gen-next [host] [port] [diff]')
+  .description('Tries to generate the next block of the blockchain')
+  .action(service(ucoin.createPeerServer, generateAndSend("generateNext")));
+
+program
+  .command('gen-root [host] [port] [diff]')
+  .description('Tries to generate root block, with choice of root members')
+  .action(service(ucoin.createPeerServer, generateAndSend("generateNewcomers")));
+
+function generateAndSend (generationMethod) {
+  return function (host, port, difficulty, server, conf) {
+    async.waterfall([
+      function (next){
+        var method = eval('server.BlockchainService.' + generationMethod);
+        method(next);
+      },
+      function (block, next){
+        logger.debug('Block to be sent: %s', block.quickDescription());
+        var wiz = wizard(server);
+        var doSign = null;
+        async.waterfall([
+          function (next){
+            if (!conf.salt && !conf.passwd)
+              wiz.configKey(conf, next);
+            else
+              next();
+          },
+          function (next){
+            signature.sync(conf.salt, conf.passwd, next);
+          },
+          function (sigFunc, next){
+            doSign = sigFunc;
+            // Extract key pair
+            crypto.getKeyPair(conf.passwd, conf.salt, next);
+          },
+          function (pair, next){
+            proveAndSend(server, block, doSign, base58.encode(pair.publicKey), difficulty, host, port, next);
+          },
+        ], next);
+      },
+    ], logIfErrorAndExit(server));
+  };
+}
+
+function proveAndSend (server, block, sigFunc, issuer, difficulty, host, port, done) {
+  var BlockchainService = server.BlockchainService;
+  async.waterfall([
+    function (next){
+      block.issuer = issuer;
+      BlockchainService.prove(block, sigFunc, difficulty, next);
+    },
+    function (block, next){
+      var Peer = server.conn.model('Peer');
+      var peer = new Peer({
+        endpoints: [['BASIC_MERKLED_API', host, port].join(' ')]
+      });
+      program.show && console.log(block.getRawSigned());
+      logger.info('Posted block ' + block.quickDescription());
+      multicaster().sendBlock(peer, block, next);
+    },
+  ], done);
+}
+
+program
+  .command('export-bc [upto]')
+  .description('Exports the whole blockchain as JSON array, up to [upto] block number (excluded).')
+  .action(service(ucoin.createPeerServer, function (upto, server, conf) {
+    async.waterfall([
+      function (next){
+        server.conn.model('Block')
+          .find(upto ? { number: { $lt: upto }} : {})
+          .sort({ number: 1 })
+          .exec(next);
+      },
+      function (blocks, next){
+        var jsoned = [];
+        blocks.forEach(function (block) {
+          jsoned.push(_(block.json()).omit('raw'));
+        });
+        console.log(JSON.stringify(jsoned, null, "  "));
+        next();
+      },
+    ], function (err) {
+      if (err) {
+        logger.error(err);
+      }
+      server.disconnect();
+      process.exit();
+    });
+  }));
+
+program
+  .command('check-config')
+  .description('Checks the node\'s configuration')
+  .action(service(ucoin.createPeerServer, function (server, conf) {
+    server.checkConfig(function (err) {
+      if (err)
+        logger.warn(err);
+      else
+        logger.warn('Configuration seems correct.');
+      server.disconnect();
+      process.exit();
+    });
+    return;
+  }));
+
+program
+  .command('config')
+  .description('Register configuration in database')
+  .action(service(function (server, conf) {
+    conf.save(function (err) {
+      if(err){
+        logger.error("Configuration could not be saved: " + err);
+      }
+      else{
+        logger.debug("Configuration saved.");
+      }
+      server.disconnect();
+      process.exit();
+      return;
+    });
+  }));
+
+program
+  .command('reset [config|data|peers|tx|stats|all]')
+  .description('Reset configuration, data, peers, transactions or everything in the database')
+  .action(service(function (type, server, conf) {
+    if(!~['config', 'data', 'peers', 'tx', 'stats', 'all'].indexOf(type)){
+      logger.error('Bad command: usage `reset config`, `reset data`, `reset peers`, `reset tx`, `reset stats` or `reset all`');
+      server.disconnect();
+      return;
+    }
+    if(type == 'data'){
+      server.reset(function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Data successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+    if(type == 'peers'){
+      server.resetPeers(function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Peers successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+    if(type == 'tx'){
+      server.resetTxs(function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Transactions successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+    if(type == 'stats'){
+      server.resetStats(function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Stats successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+    if(type == 'config'){
+      server.resetConf(function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Configuration successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+    if(type == 'all'){
+      async.parallel({
+        data: server.reset,
+        config: server.resetConf
+        }, function (err) {
+        if(err)
+          logger.error(err);
+        else
+          logger.warn('Data & Configuration successfuly reseted.');
+        server.disconnect();
+        process.exit();
+      });
+    }
+  }));
+
+function serverStart(server, conf) {
+
+  if (conf.udid2) {
+    // UserID must match udid2 format
+    constants.setUDID2Format();
+  }
+
+  async.waterfall([
+    function (next){
+      // Launching server
+      server.start(function (err, app) {
+        next(err);
+      });
+    },
+    function (next) {
+      var theRouter = router(server.PeeringService.pubkey, server.conn, server.conf);
+      var theCaster = multicaster();
+      server
+        .pipe(theRouter) // The router ask for multicasting of documents
+        .pipe(theCaster) // The multicaster may answer 'unreachable peer'
+        .pipe(theRouter);
+    }
+  ], function (err) {
+    if(err){
+      logger.error(err);
+      server.disconnect();
+      process.exit();
+      return;
+    }
+    logger.debug('Server ready!');
+  });
+}
+
+function startWizard(step, server, conf, done) {
+  var wiz = wizard(server);
+  var task = {
+    'currency': wiz.configCurrency,
+    'basic': wiz.configBasic,
+    'pow': wiz.configPoW,
+    'network': wiz.configNetwork,
+    'key': wiz.configKey,
+    'ucp': wiz.configUCP
+  };
+  var wizDo = task[step] || wiz.configAll;
+  async.waterfall([
+    function (next){
+      wizDo(conf, next);
+    },
+    function (next){
+      conf.save(function (err) {
+        !err && logger.debug("Configuration saved.");
+        next(err);
+      });
+    },
+    function (next) {
+      // Check config
+      service(ucoin.createPeerServer, function (key, server, conf) {
+        next();
+      })(null, null);
+    }
+  ], done);
+}
+
+function bootstrapServer(host, port, server, conf) {
+  var wiz = wizard(server);
+  async.series([
+    function(next) {
+      // Reset data
+      server.reset(next);
+    },
+    function(next) {
+      wiz.automaticNetworkConfiguration(conf, function(err) {
+        if (err) {
+          wiz.choose('UPnP does not seem available. Switch to manual network configuration?', true,
+            function() {
+              conf.autoconf = false;
+              wiz.manualNetworkConfiguration(conf, next);
+            },
+            function() {
+              next();
+            });
+        } else {
+          conf.autoconf = true;
+          next();
+        }
+      });
+    },
+    function(next) {
+      // PublicKey
+      var keyChosen = true;
+      async.doWhilst(function(next){
+        async.waterfall([
+          function(next) {
+            if (!program.member && !conf.salt && !conf.passwd) {
+              wiz.choose('You need a keypair to identify your node on the network. Would you like to automatically generate it?', true,
+                function(){
+                  conf.salt = ~~(Math.random() * 2147483647);
+                  conf.passwd = ~~(Math.random() * 2147483647);
+                  next();
+                },
+                function(){
+                  startWizard("key", server, conf, next);
+                });
+            } else if(program.member) {
+              async.waterfall([
+                function(next) {
+                  async.parallel({
+                    node: function(callback){
+                      vucoin(host, port, callback);
+                    },
+                    keys: function(callback){
+                      crypto.getKeyPair(conf.passwd, conf.salt, callback);
+                    }
+                  }, next);
+                },
+                function(res, next) {
+                  var node = res.node;
+                  var keys = res.keys;
+                  // Look for existing member with this key
+                  node.wot.certifiersOf(base58.encode(keys.publicKey), function(err) {
+                    next(null, !err);
+                  });
+                },
+                function(matchesMember, next) {
+                  if (!matchesMember){
+                    wiz.choose('Your key does not match an existing member. Retry?', true,
+                      function(){
+                        keyChosen = false;
+                        startWizard("key", server, conf, next);
+                      },
+                      function(){
+                        logger.warn('This node will not be able to compute blocks.');
+                        next();
+                      });
+                  } else {
+                    keyChosen = true;
+                    next();
+                  }
+                }
+              ], next);
+            } else {
+              next();
+            }
+          }
+        ], next);
+      }, function(){
+        return !keyChosen;
+      }, next);
+    },
+    function(next) {
+      conf.save(function(err) {
+        next(err);
+      });
+    },
+    function (next){
+      logger.info('Configuration saved.');
+      // Sync
+      var start = 0;
+      var remote = new Synchroniser(server, host, port, conf);
+      async.doWhilst(function(next){
+        start = new Date().getTime();
+        remote.sync(next);
+      }, function(){
+        var now = new Date().getTime();
+        return (now - start)/1000 > constants.NETWORK.SYNC.MAX;
+      }, function(err) {
+        if(err){
+          err = 'Error during sync: ' + err;
+        }
+        next(err);
+      });
+    },
+    function() {
+      // Start
+      serverStart(server, conf);
+    }
+  ], function (err) {
+    if (err) {
+      logger.error(err);
+    }
+    server.disconnect();
+    process.exit();
+  });
+}
+
+function overrideConf(conf) {
+
+  conf.sync = conf.sync || {};
+  var cli = {
+    currency: program.currency,
+    cpu: program.cpu,
+    server: {
+      port: program.port,
+      ipv4address: program.ipv4,
+      ipv6address: program.ipv6,
+      salt: program.salt,
+      passwd: program.passwd,
+      remote: {
+        host: program.remoteh,
+        ipv4: program.remote4,
+        ipv6: program.remote6,
+        port: program.remotep
+      }
+    },
+    db: {
+      host: program.mhost,
+      port: program.mport,
+      database: program.mdb
+    },
+    net: {
+      upnp:          program.upnp,
+      noupnp:        program.noupnp
+    },
+    logs: {
+      http:          program.httplogs,
+      nohttp:        program.nohttplogs
+    },
+    ucp: {
+      rootoffset:  program.rootoffset,
+      sigDelay:    program.sigDelay,
+      sigValidity: program.sigValidity,
+      sigQty:      program.sigQty,
+      msValidity:  program.msValidity,
+      powZeroMin:  program.powZeroMin,
+      powPeriod:   program.powPeriod,
+      powDelay:    program.powDelay,
+      participate: program.participate,
+      tsInterval:  program.tsInterval,
+      ud0:         program.ud0,
+      c:           program.growth,
+      dt:          program.dt,
+      udid2:       program.udid2,
+      incDateMin:  program.incDateMin,
+      medtblocks:  program.medtblocks,
+      dtdiffeval:  program.dtdiffeval,
+      avgGenTime:  program.avgGenTime
+    }
+  };
+
+  // Update conf
+  if (cli.currency)                         conf.currency       = cli.currency;
+  if (cli.server.ipv4address)               conf.ipv4           = cli.server.ipv4address;
+  if (cli.server.ipv6address)               conf.ipv6           = cli.server.ipv6address;
+  if (cli.server.port)                      conf.port           = cli.server.port;
+  if (cli.server.salt)                      conf.salt           = cli.server.salt;
+  if (cli.server.passwd != undefined)       conf.passwd         = cli.server.passwd;
+  if (cli.server.remote.host != undefined)  conf.remotehost     = cli.server.remote.host;
+  if (cli.server.remote.ipv4 != undefined)  conf.remoteipv4     = cli.server.remote.ipv4;
+  if (cli.server.remote.ipv6 != undefined)  conf.remoteipv6     = cli.server.remote.ipv6;
+  if (cli.server.remote.port != undefined)  conf.remoteport     = cli.server.remote.port;
+  if (cli.ucp.rootoffset)                   conf.rootoffset     = cli.ucp.rootoffset;
+  if (cli.ucp.sigDelay)                     conf.sigDelay       = cli.ucp.sigDelay;
+  if (cli.ucp.sigValidity)                  conf.sigValidity    = cli.ucp.sigValidity;
+  if (cli.ucp.msValidity)                   conf.msValidity     = cli.ucp.msValidity;
+  if (cli.ucp.sigQty)                       conf.sigQty         = cli.ucp.sigQty;
+  if (cli.ucp.msValidity)                   conf.msValidity     = cli.ucp.msValidity;
+  if (cli.ucp.powZeroMin)                   conf.powZeroMin     = cli.ucp.powZeroMin;
+  if (cli.ucp.powPeriod)                    conf.powPeriod      = cli.ucp.powPeriod;
+  if (cli.ucp.powDelay)                     conf.powDelay       = cli.ucp.powDelay;
+  if (cli.ucp.participate)                  conf.participate    = cli.ucp.participate == 'Y';
+  if (cli.ucp.tsInterval)                   conf.tsInterval     = cli.ucp.tsInterval;
+  if (cli.ucp.dt)                           conf.dt             = cli.ucp.dt;
+  if (cli.ucp.c)                            conf.c              = cli.ucp.c;
+  if (cli.ucp.ud0)                          conf.ud0            = cli.ucp.ud0;
+  if (cli.ucp.udid2)                        conf.udid2          = cli.ucp.udid2;
+  if (cli.ucp.incDateMin)                   conf.incDateMin     = cli.ucp.incDateMin;
+  if (cli.ucp.medtblocks)                   conf.medianTimeBlocks = cli.ucp.medtblocks;
+  if (cli.ucp.avgGenTime)                   conf.avgGenTime     = cli.ucp.avgGenTime;
+  if (cli.ucp.dtdiffeval)                   conf.dtDiffEval     = cli.ucp.dtdiffeval;
+  if (cli.net.upnp)                         conf.upnp           = true;
+  if (cli.net.noupnp)                       conf.upnp           = false;
+  if (cli.cpu)                              conf.cpu            = Math.max(0.01, Math.min(1.0, cli.cpu));
+  if (cli.logs.http)                        conf.httplogs       = true;
+  if (cli.logs.nohttp)                      conf.httplogs       = false;
+
+  // Specific internal settings
+  conf.ucoinVersion = program.version();
+  conf.createNext = true;
+  return conf;
+}
+
+function connect(callback) {
+  return function () {
+    var cbArgs = arguments;
+    var dbName = program.mdb || "ucoin_default";
+
+    var server = ucoin.connect({ name: dbName, host: program.mhost, port: program.mport }, overrideConf({}));
+
+    server.on('mongoFail', logErrorAndExit(server, 'Could not connect to MongoDB. Is it installed?'));
+
+    // Connecting to DB
+    server.on('connected', function (err) {
+
+      if(err){
+        logger.warn(err);
+        server.disconnect();
+        process.exit(1);
+        return;
+      }
+
+      cbArgs.length--;
+      cbArgs[cbArgs.length++] = server;
+      cbArgs[cbArgs.length++] = server.conf;
+      callback.apply(this, cbArgs);
+    });
+
+    // Initialize server (db connection, ...)
+    server.init();
+  };
+}
+
+function service(serverFactory, callback) {
+  if (arguments.length == 1) {
+    callback = serverFactory;
+    serverFactory = ucoin.createTxServer;
+  }
+  return function () {
+    var cbArgs = arguments;
+    var dbName = program.mdb || "ucoin_default";
+
+    var server = serverFactory({ name: dbName, host: program.mhost, port: program.mport }, overrideConf({}));
+
+    server.on('mongoFail', logErrorAndExit(server, 'Could not connect to MongoDB. Is it installed?'));
+    server.on('BMAFailed', logErrorAndExit(server));
+
+    // Connecting to DB
+    server.on('services', function (err) {
+
+      if(err){
+        logger.warn(err);
+        server.disconnect();
+        process.exit(1);
+        return;
+      }
+
+      cbArgs.length--;
+      cbArgs[cbArgs.length++] = server;
+      cbArgs[cbArgs.length++] = server.conf;
+      callback.apply(this, cbArgs);
+    });
+
+    // Initialize server (db connection, ...)
+    server.init();
+  };
+}
+
+function logIfErrorAndExit (server, prefix) {
+  return function (err) {
+    err && logger.error((prefix ? prefix : "") + (err.message || err));
+    server.disconnect();
+    process.exit(err ? 1 : 0);
+  };
+}
+
+function logErrorAndExit (server, errMsg) {
+  return function (err) {
+    (err || errMsg) && logger.error(errMsg ? errMsg : (err.message || err));
+    server.disconnect();
+    process.exit(1);
+  };
+}
+
+function parsePercent(s) {
+  var f = parseFloat(s);
+  return isNaN(f) ? 0 : f;
+}
+
+program.parse(process.argv);

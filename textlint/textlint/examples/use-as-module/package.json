@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npm rm textlint && npm i",
+    "test": "node index.js"
+  },
+  "author": "azu",
+  "license": "MIT",
+  "dependencies": {
+    "textlint": "file:../..",
+    "textlint-rule-no-todo": "^1.0.3"
+  }
+}

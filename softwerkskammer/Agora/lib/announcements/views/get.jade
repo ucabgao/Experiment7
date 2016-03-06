@@ -1,0 +1,21 @@
+extends ../../../views/layout
+block title
+  | #{announcement.title}
+
+block content
+  .row-fluid
+    .span12
+      .page-header
+        h2 #{announcement.title}&nbsp;
+          small #{announcement.fromDate()}
+          if (typeof(user) !== 'undefined' && user.member.isAdmin)
+            a.pull-right.btn(href="/announcements/edit/#{encodeURIComponent(announcement.url)}", title="Bearbeiten"): i.icon-edit
+      .row-fluid
+        .span8
+          !{announcement.messageHTML()}
+          p
+            em
+              if ('automatisch' === announcement.authorname)
+                | #{announcement.authorname}
+              else
+                a(href="/members/#{encodeURIComponent(announcement.authorname)}") #{announcement.authorname}

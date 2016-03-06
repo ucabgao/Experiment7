@@ -1,0 +1,73 @@
+{
+  "name": "textlint",
+  "description": "Plugable text linting tool(markdown support).",
+  "version": "5.0.0",
+  "homepage": "https://github.com/textlint/textlint/",
+  "keywords": [
+    "plugable",
+    "text",
+    "textlint",
+    "markdown",
+    "lint",
+    "linting",
+    "AST"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/textlint/textlint.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "bin",
+    "lib",
+    "src"
+  ],
+  "bin": {
+    "textlint": "./bin/textlint.js"
+  },
+  "scripts": {
+    "build": "babel src --out-dir lib --source-maps",
+    "watch": "babel src --out-dir lib --watch --source-maps",
+    "prepublish": "npm run --if-present build",
+    "test:example": "./test/example-test.sh",
+    "test": "mocha test/*.js && jscs src && npm run test:example",
+    "perf": "cd perf && npm run perf"
+  },
+  "directories": {
+    "test": "test/"
+  },
+  "author": "azu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/textlint/textlint/issues"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "clone": "^1.0.0",
+    "espower-babel": "^3.3.0",
+    "jscs": "^2.1.0",
+    "mocha": "^2.3.3",
+    "power-assert": "^1.0.1",
+    "textlint-plugin-html": "^0.1.2",
+    "textlint-rule-helper": "^1.1.3",
+    "textlint-rule-no-todo": "^1.0.2"
+  },
+  "dependencies": {
+    "bluebird": "^3.0.5",
+    "carrack": "0.0.3",
+    "concat-stream": "^1.4.7",
+    "debug": "^2.1.0",
+    "interop-require": "^1.0.0",
+    "mkdirp": "^0.5.0",
+    "object-assign": "^4.0.1",
+    "optionator": "^0.6.0",
+    "rc-loader": "^1.0.0",
+    "textlint-formatter": "^1.1.1",
+    "textlint-plugin-markdown": "^1.0.1",
+    "textlint-plugin-text": "^1.0.1",
+    "traverse": "^0.6.6",
+    "try-resolve": "^1.0.1",
+    "txt-ast-traverse": "^1.2.0",
+    "unique-concat": "^0.2.2"
+  }
+}

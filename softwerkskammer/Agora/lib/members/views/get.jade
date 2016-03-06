@@ -1,0 +1,61 @@
+extends ../../../views/layout
+
+include ../../../views/formComponents
+
+block title
+  | Profil für #{member.firstname} #{member.lastname}
+
+block content
+  .row-fluid
+    .span12
+      .page-header
+        h2
+          | "#{member.nickname}"&nbsp;
+          small
+            if (member.isAdmin)
+              | Admin
+            else
+              | Profilansicht
+          if (typeof(user) !== 'undefined' && (user.member.isAdmin || user.member.id === member.id))
+            a.pull-right.btn(href="/members/edit/#{encodeURIComponent(member.nickname)}"): i.icon-edit
+  .row-fluid
+    .span8
+      p
+        strong Vorname:
+        |  #{member.firstname}
+      p
+        strong Nachname:
+        |  #{member.lastname}
+      p
+        strong Twitter: 
+        span.twitterify
+          | #{member.twitter}
+      p
+        strong Ort / Region:
+        |  #{member.location}
+      p
+        strong Beruf:
+        |  #{member.profession}
+      p
+        strong Interessenschwerpunkte:
+        |  #{member.interests}
+      p
+        strong Website / Blog: 
+        span.urlify
+          | #{member.site}
+
+      p &nbsp;
+    .span4
+      p
+        img(src=member.avatarUrl(200))
+
+  .row-fluid
+    .span12
+      a.btn.btn-primary(href="/mailsender/contactMember/#{encodeURIComponent(member.nickname)}")
+        i.icon-envelope
+        | &nbsp;Eine Mail an #{member.firstname} #{member.lastname} senden
+
+      h3 Mitglied in:
+      ul
+        each group in subscribedGroups
+          li: .group: strong: a(href='../groups/#{group.id}') #{group.longName}

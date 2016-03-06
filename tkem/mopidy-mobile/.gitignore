@@ -1,0 +1,17 @@
+*.egg-info
+*.pyc
+.coverage
+.io-config.json
+build/
+dist/
+mopidy_mobile/www/*/
+mopidy_mobile/www/mopidy-mobile.bundle.min.js
+node_modules/
+platforms/
+plugins/
+resources/android/icon/
+resources/android/splash/
+resources/ios/icon/
+resources/ios/splash/
+www/css/
+www/lib/

@@ -1,0 +1,74 @@
+{% load i18n %}
+
+<div class="subnav">
+  {% if show_delete_link %}
+    <a href="delete/" class="deletelink btn btn-danger">
+      <i class="icon-trash icon-white"></i>
+      {% trans "Delete" %}
+    </a>
+  {% endif %}
+
+  <div class="actions pull-right">
+    <ul>
+      <li class="action-item">
+        <div id="actions-right-alt" class="btn-group pull-left">
+          <a href="history/" class="btn">
+            <i class="icon-time"></i>
+            {% trans "History" %}
+          </a>
+
+          {% if has_absolute_url %}
+            <a href="../../../r/{{ content_type_id }}/{{ object_id }}/" class="btn">
+              <i class="icon-share-alt"></i>
+              {% trans "View on site" %}
+            </a>
+          {% endif %}
+        </div>
+      </li>
+
+      <li class="action-item">
+        <div id="submitChangeFormSaves" class="btn-group">
+          {% if show_save %}
+            <input type="submit" value="✓ {% trans 'Save' %}"
+                class="default btn btn-success" name="_save" {{ onclick_attrib }}>
+            {% if show_save_and_continue or show_save_as_new or show_save_and_add_another %}
+              <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+            {% endif %}
+          {% endif %}
+
+          {% if show_save_and_continue or show_save_as_new %}
+            <ul class="dropdown-menu">
+              {% if show_save_and_continue %}
+                <li>
+                  <a href="javascript:void(0);" data-name="_continue">
+                    {% trans 'Save and continue editing' %}
+                  </a>
+                </li>
+              {% endif %}
+
+              {% if show_save_as_new %}
+                <li>
+                  <a href="javascript:void(0);" data-name="_saveasnew">
+                    {% trans 'Save as new' %}
+                  </a>
+                </li>
+              {% endif %}
+
+              {% if show_save_and_add_another %}
+                <li>
+                  <a href="javascript:void(0);" data-name="_addanother">
+                    {% trans 'Save and add another' %}
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
+          {% endif %}
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div style="clear:both;"></div>
+</div>

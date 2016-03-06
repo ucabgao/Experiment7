@@ -1,0 +1,27 @@
+#main_nav
+    ul#left_nav.nav.nav-pills
+        li.active
+            a(href="#")#switch Switch
+        li
+            a(href="#")#driver.btn.btn-inverse
+
+    ul#right_nav.nav.nav-pills
+        li.dropdown.active
+            a(href="#",data-toggle="dropdown")#current_language.dropdown-toggle Language <b class="caret"></b> </a>
+            ul#languageList.dropdown-menu
+        if workspace
+            //-li.active
+            //-    a(href="#")#compileRun Compile & Run
+            li.active
+                a(href="#")#saveFile Save File
+        li.active
+            a(href="#")#anoLink
+                i.icon-edit
+                |Annotate
+
+        span#loader.hide
+            img(src="/stylesheets/img/ajax-loader.gif", alt="")#loader_img
+            span#loader_msg
+            
+
+    .clearfix

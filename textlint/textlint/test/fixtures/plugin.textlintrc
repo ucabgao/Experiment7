@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "example",
+    "configurable-plugin"
+  ],
+  "rules": {
+    "example/example-rule": true,
+    "configurable-plugin/overwrited-rule": false
+  }
+}

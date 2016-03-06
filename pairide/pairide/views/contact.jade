@@ -1,0 +1,55 @@
+extends layout
+
+append scripts
+	script(src="js/reportBug.js")
+	script(src="js/jquery.validate.min.js")
+
+block content
+	h4 Contact Us
+	| You can contact us anytime with feedback, or general inquiries at pairIDEuoft@gmail.com. We take your feedback seriously!
+	br
+	br
+	h4 Report a Bug
+	| Please report any bugs you may have encountered below. When reporting a bug the more detail you write in describing the bug the easier it 
+	| will be to fix the problem. Information on what you were doing in the moment before the bug occured is essential. Thank you for your 
+	| co-operation.
+	br
+	br
+
+	script
+		var RecaptchaOptions = {
+			theme : 'blackglass',
+			lang  : 'en'
+		};
+
+	if formError
+		.alert
+			button(data-dismiss="alert").close
+				|&times;
+			if formError == 1
+				|Error: Malformed Input. 
+			else
+				|Error: Invalid captcha input. 
+			| Please try again.
+
+
+	form(method="post", action="contact")#reportBugForm.form-horizontal
+
+		.control-group
+			label.control-label
+				|Email:
+			.controls
+				input(type="text", name="bugReportEmail")#reportBugEmail
+		.control-group
+			label.control-label
+				|Message:
+			.controls
+				Textarea(rows=5, name="bugReportBox", maxlength=1024)#reportBugBox.bugReportBox
+		.control-group
+			.controls
+				!= captcha
+		.control-group
+			.controls
+				button("type=submit").btn-success.btn-medium Report Bug
+
+	

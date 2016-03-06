@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Mine Sweeper</title>
+		<script src="minesweeper.js"></script>
+		<style>
+			#minesweeper { text-align:center; }
+			#board { display: inline-block; }
+			#menu { margin-bottom:10px; }
+			#result { margin-bottom:10px; height: 20px; }
+			td { width: 30px; height: 30px; border: 1px dotted; }
+			.up { background-color: silver; }
+			.down { background-color: white; }
+			.flag { background-color: pink; }
+			.question { background-color: black; }
+			.mine { background-color: red; }
+		</style>
+	</head>
+	<body>
+		<div id="minesweeper">
+			<div id="menu">
+				<label for="level">Level</label>
+				<select id="level">
+					<option value="Beginner">Beginner</option>
+					<option value="Easy">Easy</option>
+					<option value="Intermediate">Intermediate</option>
+					<option value="Advanced">Advanced</option>
+				</select>
+				<input id="newGame" type="button" value="New Game" onClick="newGame();"/>
+			</div>
+			<div id="result">You Win!</div>
+			<div id="board"></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,313 @@
+// Colour scheme
+@grey: #556270;
+@blue: #4ECDC4;
+@green: #C7F464;
+@salmon: #FF6B6B;
+@rose: #C44D58;
+
+// outlines
+*:focus {
+  outline: none;
+}
+
+// Links
+a:hover { text-decoration: none; }
+a {
+  target-name:new;
+  target-new:tab;
+}
+
+// Logo
+.logo {
+  padding-left: 12px;
+  font-family: 'Source Code Pro', sans-serif;
+  font-weight: 450;
+  font-size: 18pt;
+  color: white;
+  text-shadow: none; /* override bootstrap brand shadow */  
+
+  #main {
+    font-weight: 500;
+    color: @blue;
+  }
+  
+  #tld {
+    font-weight: 400;
+    color: @green;
+  }
+}
+
+.brand {
+  float: left;
+  padding: 10px 15px;
+}
+
+.btn {
+  outline: none;
+}
+
+// Navbar
+.navbar {
+  .tooltip.bottom {
+    padding: 5px 0;
+    margin-top: 5px;
+  }
+  .search-group {
+    input {
+      margin: 4px;
+      width: 550px;
+    }
+    .dropdown-menu {
+      margin: 10px 40px;
+      li a:hover {
+        background: white;
+        color: black;
+      }
+    }
+  }
+}
+
+// Login
+.navbar-right {
+  padding: 5px 20px;
+}
+
+#login-dropdown-list {
+  .btn {
+    width: 100%;
+  }
+} 
+
+// Forms
+.bold-label {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+// Landing page
+.mailing-signup {
+  margin-top: 50px;
+  input {
+    height: 2em;
+    line-height: normal;
+    font-size: 1.6em;
+    vertical-align: center;
+  }
+  .btn {
+  }
+}
+
+// Home page
+.filter-message {
+  font-size: 1.5em;
+}
+
+.projects {
+  margin-top: 30px;
+  padding: 0 15px;
+  li {
+    cursor: pointer;
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+    .showProject {
+      font-size: 1.3em;
+      text-decoration: none;
+    }
+    a {
+      font-weight: bold;
+    }
+    .date {
+      margin-top: 5px;
+    }
+    .deleteProject {
+      margin-left: 10px;
+    }
+  }
+}
+
+.date {
+  margin: 0;
+  color: grey;
+}
+
+.white, .white a {
+  color: #fff;
+}
+
+.outer-landing {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url('/lab.jpg');
+  background-size: cover;
+}
+.landing-container {
+  position: absolute;
+  border-radius: 3px;
+  left: 9%;
+  width: 82% !important;
+  margin: 0 auto;
+  padding: 40px 10px 80px 10px;
+  background: white;
+  input {
+    vertical-align: middle;
+  }
+}
+
+html {
+  background-color: #f4f4f4;
+}
+
+.footer {
+  margin-top: 80px;
+  padding: 10px 0 70px;
+  background-color: #f4f4f4;
+  border-top: 1px solid #aaa;
+  h4 {
+    font-size: 0.9em;
+  }
+}
+
+// About
+.about-row {
+  margin-top: 50px;
+  img {
+    max-width: 140px;
+    margin-right: 15px;
+    margin-bottom: 50px;
+  }
+}
+
+/* FIXME: do not override Bootstrap - make a new class */
+.form-horizontal .form-group {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.hn {
+  background-color: #ff6600;
+  .container {
+    padding-left: 43px;
+  }
+}
+
+#description {
+  height:400px; 
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-horizontal .form-group {
+margin-right: 0;
+margin-left: 0;
+}
+
+.badge-success {
+  background-color: #468847;
+  color: white;
+}
+.badge-success:hover {
+  background-color: #356635;
+  colour: white;
+}
+
+// Notifications
+.notification-icon {
+  color: white;
+}
+
+.notifications {
+  ul {
+    padding-left: 0;
+    margin-top: 20px;
+    height:100%;
+    overflow:auto;
+    li {
+      margin-left :0;
+      padding:10px;
+      border-bottom:1px solid #666;
+      font-size:13px;
+      background:white;
+      .notification-timestamp{
+        color:#555;
+        font-size:12px;
+      }
+      &.read{
+        color:#555;
+        background:#f3f3f3;
+      }
+    }
+  }
+  p, .checkbox {
+    padding-left: 0;
+  }
+  .mark-read-checkbox {
+    margin-right: 7px;
+    padding-top: 3px;
+  }
+  .read {
+    a {
+      color: #666;
+    }
+    color: #666;
+    background-color: #444;
+  }
+  .notification-timestamp {
+    color: #bbb;
+    font-style: bold;
+  }
+  .snippet {
+    padding-left: 20px;
+    font-style: italic;
+  }
+  .notification-head {
+    float: left;
+    width: 100%;
+    margin-right: 90px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .mark-as-read {
+    position: absolute;
+    right: 15px;
+    top: 11px;
+    margin-left: 5px;
+  }
+}
+
+.offer-skills-row {
+  margin: 15px 0 10px 0;
+  .offer-skills {
+    text-align: center;
+  }
+}
+#offer-help-modal {
+  #offer-help-textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: none;
+    outline: none;
+  }
+  .modal-footer {
+    margin-top: 0;
+  }
+  #owner-alert {
+    margin-top: 21;
+    margin-bottom: 0;
+  }
+}
+
+.project-list-tags {
+  margin-bottom: 5px;
+}
+.label-success {
+  margin-left: 10px;
+}

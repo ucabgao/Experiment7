@@ -1,0 +1,24 @@
+{
+  "name": "falcon",
+  "private": true,
+  "version": "0.0.1",
+  "description": "The System Garden notification system. Built with RabbitMQ as its queue, falcon is a scalable messaging platform intended to be highly extendable.",
+  "dependencies": {
+    "amqp": "0.1.7",
+    "nodemailer": ">=0.5",
+    "optimist": ">=0.6"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "main": "server.js",
+  "repository": "",
+  "author": "Alex Stuckey <alex@stuckey.org.uk>",
+  "license": {
+      "type": "GPLv2",
+      "url": "http://www.opensource.org/licenses/GPL-2.0"
+    },
+  "engines": {
+    "node": ">=0.6"
+  }
+}

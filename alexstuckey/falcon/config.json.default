@@ -1,0 +1,23 @@
+{
+  "rabbit": {
+    "host": "",
+    "port": 5672,
+    "username": "",
+    "password": ""
+  },
+  "SMTP": {
+    "host": "",
+    "port": 25,
+    "username": "",
+    "password": "",
+    "from": ""
+  },
+  "nexmo": {
+    "key": "",
+    "secret": ""
+  },
+  "supportedMethods": [
+    "email",
+    "sms"
+  ]
+}

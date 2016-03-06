@@ -1,0 +1,275 @@
+body {
+padding-top:20px;
+padding-bottom:40px;
+}
+
+.container-narrow {
+max-width:1000px;
+margin:0 auto;
+}
+
+#addProjectButton{
+  height:32px;
+  width:32px;
+  background-image:url('images/32x32/add.png');
+  background-repeat:no-repeat;
+  float:right;
+}
+.projectLabel{
+  font-size:16pt;
+}
+
+.container-narrow > hr {
+margin:30px 0;
+}
+
+.jumbotron {
+text-align:center;
+margin:60px 0;
+}
+
+.jumbotron h1 {
+font-size:72px;
+line-height:1;
+}
+
+.jumbotron .btn {
+font-size:21px;
+padding:14px 24px;
+}
+
+.marketing {
+margin:60px 0;
+}
+
+.marketing p + h4 {
+margin-top:28px;
+}
+
+.home_link, .home_link:hover, #loader_msg{
+  color: #999999;
+  text-decoration: none;
+}
+
+.home_link_highlight, .home_link_highlight:hover{
+  color: #f92672;
+  text-decoration: none;
+}
+
+#loader{
+  margin-left: 20px;
+}
+
+#loader_img{
+  margin-right: 5px;
+}
+
+#chat_area{
+  padding: 0% 1%;
+}
+
+#code_overlay{
+  background: #000;
+  height: 450px;
+  z-index: 100;
+  opacity: 0.7;
+  text-align: center;
+}
+
+#overlay_message{
+  color: #fff;
+  line-height: 450px;
+  font-size: 16px;
+  z-index: 150;
+}
+
+#chatmsg {
+height: 207px;
+overflow:auto;
+}
+
+
+#msg {
+width:95%;
+}
+
+#userlist h5,#chatTxt {
+font-variant:small-caps;
+}
+
+#code_area {
+  height: 450px;
+  padding: 10px 0px;
+  background: none repeat scroll 0 0 rgba(0, 136, 204, 0.2);
+  z-index: 3;
+}
+
+#code {
+position: relative;
+width:99%;
+height:100%;
+}
+
+.clear {
+clear:both;
+}
+
+.errorLine {
+text-decoration:none;
+color:red!important;
+}
+
+.errorLine:hover {
+text-decoration:none;
+}
+
+label {
+font-variant:small-caps;
+width:25%;
+float:left;
+}
+
+.aboutText{
+  text-align: justify;
+}
+
+.justify{
+  text-align: justify;
+}
+
+#start{
+  width: 700px;
+  margin: -320px 0 0 -350px;;
+}
+
+.bugReportBox{
+  width: 60%;
+  resize: none;
+}
+span.error, p.error{
+  font-variant:small-caps;
+  margin-left: 10px;
+  color: #FAA732;
+}
+
+.right-seperator{
+-moz-box-shadow:rgba(255,255,255,0.07) 1px 0 0;
+-webkit-box-shadow:rgba(255,255,255,0.07) 1px 0 0;
+-o-box-shadow:rgba(255,255,255,0.07) 1px 0 0;
+box-shadow:rgba(255,255,255,0.07) 1px 0 0;
+border-right:1px solid #121212;
+border-left:none;
+}
+
+#file_browser{
+  padding:4px;
+}
+
+.fileBrowserBox {
+  width: 95%;
+  height: 433px;
+  background: rgba(125,125,125,0.5);
+  overflow: auto;
+  padding: 5px;
+  border-radius: 4px 4px 4px 4px;
+}
+
+.line-style-driver{
+  position: absolute;
+  z-index: 5;
+  background: #8EC21F;
+}
+
+.line-style-navigator{
+  position: absolute;
+  z-index: 5;
+  background: #C2731F;
+}
+
+.ace_gutter-cell.ace_breakpoint{
+    border-radius: 20px 0px 0px 20px;
+    box-shadow: 0px 0px 1px 1px red inset;
+    margin-right: 150px;
+} 
+
+#annot_text{
+  color: #fff;
+  width: 400px;
+  font-size: 12px;
+}
+
+#username{
+  color: white;
+}
+
+.annotation{
+  width: 10px;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  border-top: #D6D6D6 3px solid;
+  border-bottom: #D6D6D6 3px solid;
+  position: absolute;
+}
+
+.popover{
+  font-size: 12px;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  padding: 4px 0px;
+  border: 1px solid rgba(255,255,255,0.25);
+  background-color: rgb(25,25,25);
+  background-color: rgba(25,25,25,0.92);
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  box-shadow: 0 0 3px #555;
+  -webkit-box-shadow: 0 0 3px #555;
+  -moz-box-shadow: 0 0 3px #555;
+}
+
+.popover-title{
+  display: none;
+}
+
+#modal_user_list li:hover{
+  background: black;
+  cursor:pointer;
+}
+
+.ace_selected_word{
+  position: absolute;
+  z-index: 5;
+  background: #C2731F;
+}
+
+#error_alert{
+  color: #DB6300;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#left_nav{
+  margin-left:17.2%;
+  width: 250px;
+  float: left;
+}
+
+#right_nav{
+  margin-left:19%;
+  width: 400px;
+  float: left;
+}
+
+#recaptcha_response_field{
+  left: 0 !important;
+}
+
+.driver{
+  color: #8EC21F;
+}
+
+.navi{
+  color: #C2731F;
+}

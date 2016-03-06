@@ -1,0 +1,61 @@
+extends ../../../views/layout
+
+include  ../../../views/formComponents
+
+block scripts
+  script(src="/clientscripts/check-groupform.js")
+
+block title
+  | Gruppe&nbsp;
+  - if (group.isValid())
+    | "#{group.id}" bearbeiten
+  - else
+    |  anlegen
+
+block content
+  form(id='groupform', action='/groups/submit', method='post')
+    fieldset
+      .row-fluid
+        .span12
+          legend
+            | Gruppe
+            if (group.isValid())
+              |  "#{group.id}" bearbeiten
+            else
+              |  anlegen
+      .row-fluid
+        .span6
+          if (group.isValid())
+            mixin textReadonly('id', 'Name', group)
+          else
+            mixin text('id', 'Name', group, 'Die Adresse, unter der die Gruppe "@softwerkskammer.org" erreichbar ist.')
+          mixin text('longName', 'Titel', group, 'Anzeigetext innerhalb der Site, ist auch Realname für E-Mails')
+          if (group.isValid())
+            mixin textReadonly('emailPrefix', 'Präfix für E-Mail-Subjects', group)
+          else
+            mixin text('emailPrefix', 'Präfix für E-Mail-Subjects', group, 'steht innerhalb [] vor dem Subject in gesendeten E-Mails')
+          .control-group
+            label.control-label(for="type") Gruppenart:
+            select#type.input-block-level.input-xlarge(name="type")
+              for item in allTypes
+                option(selected=group.type === item) #{item}
+        
+          h4 Ansprechpartner
+            .control-group
+              each memberAdmin in organizersChecked
+                mixin checkbox('organizers', memberAdmin.member.nickname, memberAdmin.checked, memberAdmin.member.id)
+        .span6
+          mixin colorPicker('color', group)
+          mixin textarea('description', 'Beschreibung', group)
+      .row-fluid
+        .span12
+          if group.isValid()
+            button.btn.btn-primary.pull-right(type="submit") Speichern
+          else
+            button.btn.btn-primary.pull-right(type="submit") Anlegen
+          a.btn.pull-right(href="javascript:history.back()", type="cancel") Zurück
+
+block scripts
+  script(src="/clientscripts/jquery.validate-1.11.1.js")
+  script(src="/clientscripts/messages_de.js")
+  script(src="/clientscripts/check-groupform.js")

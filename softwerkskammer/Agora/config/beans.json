@@ -1,0 +1,78 @@
+{
+  "administrationApp": {"module": "./lib/administration"},
+  "authenticationApp": {"module": "./lib/authentication"},
+  "groupsApp": {"module": "./lib/groups"},
+  "membersApp": {"module": "./lib/members"},
+  "siteApp": {"module": "./lib/site"},
+  "announcementsApp": {"module": "./lib/announcements"},
+  "activitiesApp": {"module": "./lib/activities"},
+  "mailsenderApp": {"module": "./lib/mailsender"},
+  "mailarchiveApp": {"module": "./lib/mailarchive"},
+  "wikiApp": {"module": "./lib/wiki"},
+
+  "groupsAndMembersAPI": {"module": "./lib/groupsAndMembers/groupsAndMembersAPI"},
+  "groupsAPI": {"module": "./lib/groups/groupsAPI"},
+  "membersAPI": {"module": "./lib/members/membersAPI"},
+  "activitiesAPI": {"module": "./lib/activities/activitiesAPI"},
+  "announcementsAPI": {"module": "./lib/announcements/announcementsAPI"},
+  "mailsenderAPI": {"module": "./lib/mailsender/mailsenderAPI"},
+  "colorAPI": {"module": "./lib/administration/colorAPI"},
+  "mailarchiveAPI": {"module": "./lib/mailarchive/mailarchiveAPI"},
+  "wikiAPI": {"module": "./lib/wiki/wikiAPI"},
+
+  "groupstore": {"module": "./lib/groups/groupstore"},
+  "memberstore": {"module": "./lib/members/memberstore"},
+  "activitystore": {"module": "./lib/activities/activitystore"},
+  "announcementstore": {"module": "./lib/announcements/announcementstore"},
+  "colorstore": {"module": "./lib/administration/colorstore"},
+
+  "sympa": {"module": "./lib/groups/sympa"},
+  "sympaStub": {"module": "./lib/groups/sympaStub"},
+
+  "groupsPersistence": {"module": "./lib/persistence/persistence",
+                        "constructorArgs": {
+                             "collectionName": "groupstore"
+                       }},
+  "membersPersistence": {"module": "./lib/persistence/persistence",
+                        "constructorArgs": {
+                             "collectionName": "memberstore"
+                       }},
+  "activitiesPersistence": {"module": "./lib/persistence/persistence",
+                        "constructorArgs": {
+                             "collectionName": "activitystore"
+                       }},
+  "colorsPersistence": {"module": "./lib/persistence/persistence",
+                        "constructorArgs": {
+                             "collectionName": "colorstore"
+                       }},
+
+  "mailsPersistence": {"module": "./lib/persistence/persistence",
+                        "constructorArgs": {
+                             "collectionName": "mailsstore"
+                       }},
+  "announcementsPersistence": {"module": "./lib/persistence/persistence",
+                                "constructorArgs": {
+                                  "collectionName": "announcementstore"
+                              }},
+
+  "group": {"module": "./lib/groups/group"},
+  "member": {"module": "./lib/members/member"},
+  "activity": {"module": "./lib/activities/activity"},
+  "announcement": {"module": "./lib/announcements/announcement"},
+  "color": {"module": "./lib/administration/color"},
+  "message": {"module": "./lib/mailsender/message"},
+  "archivedMail": {"module": "./lib/mailarchive/archivedMail"},
+  "mailThread": {"module": "./lib/mailarchive/mailThread"},
+
+  "fieldHelpers": {"module": "./lib/commons/fieldHelpers"},
+  "validation": {"module": "./lib/commons/validation"},
+  "misc": {"module": "./lib/commons/misc"},
+  "sympaTransformer": {"module": "./lib/groups/sympaTransformer"},
+  "redirectRuleForNewUser": {"module": "./lib/middleware/redirectRuleForNewUser"},
+  "secureByLogin": {"module": "./lib/middleware/secureByLogin"},
+  "secureAdminOnly": {"module": "./lib/middleware/secureAdminOnly"},
+  "announcementsInSidebar": {"module": "./lib/middleware/announcementsInSidebar"},
+  "expressViewHelper": {"module": "./lib/middleware/expressViewHelper"},
+  "wikiSubdirs": {"module": "./lib/middleware/wikiSubdirs"},
+  "gitmech": {"module": "./lib/wiki/gitmech"}
+}

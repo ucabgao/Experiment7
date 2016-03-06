@@ -1,0 +1,16 @@
+ul {
+	list-style-type: none;
+	margin: 0;
+}
+fieldset {
+	margin-top: 30px;
+}
+form textarea, form input {
+	width: 60%;
+}
+textarea {
+	height: 220px;
+}
+#comment_body {
+	height: 120px;
+}

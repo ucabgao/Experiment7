@@ -1,0 +1,27 @@
+{
+  "name": "rizzo",
+  "version": "0.1.2",
+  "private": true,
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-concurrent": "latest",
+    "grunt-contrib-connect": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-jasmine": "0.8.x",
+    "jasmine-ajax": "3.x",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-grunticon": "latest",
+    "grunt-imageoptim": "latest",
+    "grunt-jscs": "^1.6.0",
+    "grunt-open": "latest",
+    "grunt-plato": "latest",
+    "grunt-shell": "latest",
+    "grunt-svgmin": "latest",
+    "grunt-template-jasmine-requirejs": "0.2.x",
+    "matchdep": "latest"
+  },
+  "dependencies": {
+    "rizzo-next": "^0.11.2"
+  }
+}

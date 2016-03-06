@@ -1,0 +1,5 @@
+{
+  "directory": "vendor/assets/javascripts",
+  "json": "bower.json",
+  "shorthand_resolver": "git://github.com/lonelyplanet/{{{ package }}}.git"
+}

@@ -1,0 +1,48 @@
+<ion-view view-title="{{'Search {name}' | translate:(ref || {name: ('Library' | translate)}) }}">
+  <ion-content>
+    <form class="list" name="form" ng-submit="submit()">
+      <div class="item item-input item-button-right" ng-repeat="term in terms">
+        <label class="input-label">
+          <select ng-model="term.key" style="vertical-align: middle;">
+            <option value="any" translate>Any</option>
+            <option value="album" translate>Album</option>
+            <option value="albumartist" translate>Album artist</option>
+            <option value="artist" translate>Artist</option>
+            <option value="comment" translate>Comment</option>
+            <option value="composer" translate>Composer</option>
+            <option value="date" translate>Date</option>
+            <option value="genre" translate>Genre</option>
+            <option value="performer" translate>Performer</option>
+            <option value="track_name" translate>Track</option>
+          </select>
+        </label>
+        <input ng-model="term.value"
+               ng-required="$index == 0 || $index != terms.length - 1"
+               placeholder="{{'Search term' | translate}}"
+               type="text">
+        <button class="button button-clear button-icon button-small mopidy-mobile-icon-close"
+                ng-click="terms.splice($index, 1)"
+                ng-show="$index != terms.length - 1"
+                type="button"
+                >
+        </button>
+      </div>
+      <label class="item item-toggle">
+        <span translate>Find exact</span>
+        <label class="toggle">
+          <input name="exact" ng-model="params.exact" type="checkbox">
+          <div class="track">
+            <div class="handle"></div>
+          </div>
+        </label>
+      </label>
+      <button class="button button-positive button-full item"
+              ng-disabled="form.$invalid"
+              translate
+              type="submit"
+              >
+        Search
+      </button>
+    </form>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,67 @@
+doctype html
+html
+  head
+    meta(name="fragment", content="!")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    
+    title= title
+    meta(name="description", content="")
+
+    link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+    link(rel="icon", href="/favicon.ico", type="image/x-icon")
+    
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Lato:300,400,700')
+
+    link(rel='stylesheet', href='/styles/vendor.css?v=' + version)
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css')
+    
+    link(rel='stylesheet', href='/styles/main.css?v=' + version)
+
+  body
+
+    header
+    .container#page
+      #main
+        block content  
+    footer
+    #modals-container
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js")
+    script.
+      window.jQuery || document.write('<script src="/js/libs/jquery.min.js">\x3C/script>');
+
+    script(src="/js/vendor.js?v=" + version)
+
+    script.
+      window.hackdash = { 
+        subdomain: "!{subdomain}",
+        baseURL: "!{host}",
+        disqus_shortname: "!{disqus_shortname}",
+        statuses: "!{statuses}",
+        providers: "!{providers}"
+      };
+
+    if ("undefined" == typeof user)
+      script.
+        window.hackdash.user = null;
+    else 
+      script.
+        window.hackdash.user = !{JSON.stringify(user)};      
+
+    script(src="/js/hackdashApp.js?v=" + version)
+
+    script.
+      $(function(){
+        window.hackdash.startApp();
+      });
+
+    script().
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-41680841-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();

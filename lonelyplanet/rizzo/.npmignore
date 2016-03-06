@@ -1,0 +1,16 @@
+config/
+features/
+git-hooks/
+lib/
+log/
+public/
+script/
+spec/
+tmp/
+vendor/
+app/controllers/
+app/data/
+app/docs/
+app/helpers/
+app/lib/
+app/models/

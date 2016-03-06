@@ -1,0 +1,26 @@
+{
+  "name": "cfn-config",
+  "version": "0.0.0",
+  "description": "Quickly configure and start AWS CloudFormation stacks",
+  "main": "index.js",
+  "bin": {
+    "cfn-config": "./bin/config.js",
+    "cfn-create": "./bin/create.js",
+    "cfn-delete": "./bin/delete.js",
+    "cfn-info": "./bin/info.js",
+    "cfn-update": "./bin/update.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/cfn-config.git"
+  },
+  "author": "Mapbox",
+  "license": "BSD",
+  "dependencies": {
+    "optimist": "~0.6.0",
+    "inquirer": "~0.4.0",
+    "underscore": "~1.5.2",
+    "aws-sdk": "~2.0.0-rc9",
+    "superenv": "0.0.1"
+  }
+}

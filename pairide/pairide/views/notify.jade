@@ -1,0 +1,18 @@
+extends layout
+
+block content
+
+	if (type == "success")
+		.alert.alert-success
+			| #{notification}
+	else
+		.alert.alert-error
+			| Error: #{notification}
+
+	if (current == "Login")
+
+		.row-fluid
+			.span4
+			.span4
+				.pagination-centered
+					include login

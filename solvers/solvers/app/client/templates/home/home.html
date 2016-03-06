@@ -1,0 +1,35 @@
+<template name="tagged">
+    {{>home}}
+</template>
+<template name="loadingTemplate">
+    {{>spinner}}
+</template>    
+<template name="home">
+    {{#unless message}}
+    {{> callToAction}}
+    {{/unless}}
+    <div class="row" id="projectList">
+        {{#if message}}
+        <div class="alert alert-info filter-message">{{message}}</div>
+        {{/if}}
+        <ul class="projects">
+        {{#each projects}}
+            <li class="clearfix">
+            <div>
+                <a class="showProject" data-id="{{_id}}" href="{{pathFor 'showProject'}}">{{name}} - {{role}}</a>{{#if isSolved status}}<span class="label label-success">Solved!</span>{{/if}}
+                {{#if mayUpdate}}
+                <button class="btn btn-xs white pull-right deleteProject">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+                {{/if}}
+            </div>
+                {{renderSmallTags}}
+            <div>
+                <a class="projectOwner" href="/profile/{{owner}}">{{username owner}}</a></h5> 
+                 <span class="date">on {{formatDate postedDate}}</span>
+            </div>
+            </li>
+        {{/each}}
+        </ul>
+    </div>
+</template>
