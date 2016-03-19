@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+aheckmann/gm,59,fc06b675a5871bc91f7c1830425fbc21a9738721,TypeScript,Undetectable,"EIS. Though the bug is related to function arity, there is no way to add annotations to indicate the fuction does not take any arguments.",197.0
