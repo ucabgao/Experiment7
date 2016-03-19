@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+anabarasan/Minesweeper,1,94e97fd7eaabe784988a8a51d75dc96336627636,Flow,Undetectable,"EIS. Wrongly implement the functionality of setting a flag for a cell when right clicking.",179.0
