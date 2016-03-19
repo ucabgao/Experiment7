@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+midasplatform/slicerappstore,37,e919c41340232a87e3b588a2be3e3e9162740b06,Flow,Undetectable,"Missing a branch. Forgot to check whether there is 'pageVisibility' support and handle the category selection when there isn't.",119.0
