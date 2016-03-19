@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+nwjs/nw-builder,60,445e691fc456b3a9398bb445d68c4620c5bd0504,TypeScript,Undetectable,"EIS. Wrong build order. The fix changes the order of some 'then' calls in a long call chain.",13.0
