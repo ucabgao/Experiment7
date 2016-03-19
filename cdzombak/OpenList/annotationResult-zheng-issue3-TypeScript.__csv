@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+cdzombak/OpenList,3,d67b48e39c721847621650cb2e6e33602b268f84,TypeScript,Undetectable,"EIS. The problem of openlist not working is caused by misplacing a statement that adds event listener on click to a button.",29.0
