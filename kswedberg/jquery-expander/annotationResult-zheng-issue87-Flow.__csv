@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+kswedberg/jquery-expander,87,f630cd4f1b78b2247428d59aaebffa4ec4998b06,Flow,Undetectable,"Parsing error. ",50.0
