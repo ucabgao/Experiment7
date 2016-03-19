@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+/* @flow */
+
+//#!/usr/bin/env node
 /**
  * @author Titus Wormer
  * @copyright 2015 Titus Wormer
@@ -154,7 +156,7 @@ if (!cli.input.length && expextPipeIn) {
         log(file);
     }, bail);
 
-    return;
+//    return;
 }
 
 /**

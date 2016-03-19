@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+wooorm/alex,74,e78d9c3a5c3de670688e63a87c058c11a164819f,Flow,Unknown,"This is obviously a type error. But how to annotate contents[PACKAGE_FIELD] to indicate it can be null?",185.0
