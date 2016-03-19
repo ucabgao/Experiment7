@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+ucoin-io/ucoin,58,a4be4ea289f9f9f69645fb9e535c8dff1b17e407,Flow,Undetectable,"EIS. Confusion between two properties type and membership. However, both exist on the object. Therefore the bug is not type related.",21.0
