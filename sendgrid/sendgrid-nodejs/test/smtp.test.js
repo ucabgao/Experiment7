@@ -1,3 +1,5 @@
+/* @flow */
+
 var Smtp = require('../lib/smtp').Smtp;
 var Sendgrid = require('../lib/sendgrid').Sendgrid;
 var should = require('should');

@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+sendgrid/sendgrid-nodejs,4,d6b3f4c8441a74d9fc32c19fd822d680f2f67cdc,Flow,Undetectable,"Syntax error. Unnecessary comma.",248.0
