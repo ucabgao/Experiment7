@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+zipang/tadaaapickr,2,460c26372bf65daa6316e073f861db22c7a16926,TypeScript,Undetectable,"Wrong predicate. When comparing two dates, in addition to months and years, wrongly include days, which prevents accessing a month when startDate or endDate is set to a date inside it. ",211.0
