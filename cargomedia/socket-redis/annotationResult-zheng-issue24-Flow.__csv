@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+cargomedia/socket-redis,24,64db16d23fbe1350bc6faa975396f95331f58c7c,Flow,Undetectable,"Missing predicate. Blindly create a directory without checking whether it already exists.",66.0
