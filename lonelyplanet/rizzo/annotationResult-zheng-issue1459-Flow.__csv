@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+lonelyplanet/rizzo,1459,6c523b6175eb43ed84aa7c1bd98200352e7e1d91,Flow,Undetectable,"EIS. Missing property in an object causes some functionality not to work.",49.0
