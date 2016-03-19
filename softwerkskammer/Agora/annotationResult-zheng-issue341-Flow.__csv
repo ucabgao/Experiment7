@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+softwerkskammer/Agora,341,5c014027c588f63a875d9aa659f612e5bbe8d95f,Flow,Undetectable,"Incomplete predicate. Forgot to check the lower bound of a property 'dayOfWeek'.",11.0
