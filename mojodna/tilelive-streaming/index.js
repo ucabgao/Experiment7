@@ -1,12 +1,14 @@
+/* @flow */
+
 "use strict";
 
 var stream = require("stream"),
     url = require("url"),
     util = require("util");
 
-var _ = require("highland"),
-    async = require("async"),
-    tilelive = require("tilelive");
+var _:any;// = require("highland"),
+async:any;// = require("async"),
+tilelive:any;// = require("tilelive");
 
 var DEFAULT_CONCURRENCY = 8,
     PING = {},
@@ -96,10 +98,15 @@ var restrict = function(info, by) {
   return info;
 };
 
+class t
+{
+    concurrency:?number;
+}
+
 /**
 * Generate a stream of stream objects containing tile data and coordinates.
 */
-var Readable = function(sourceConfig, source, options) {
+var Readable = function(sourceConfig, source, options:t) {
   stream.Readable.call(this, {
     objectMode: true,
     highWaterMark: options.concurrency
