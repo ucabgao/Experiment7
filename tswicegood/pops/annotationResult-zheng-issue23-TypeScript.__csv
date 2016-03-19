@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+tswicegood/pops,23,68ff574e94cc1a06d5fbc10502806c08d7aba622,TypeScript,Undetectable,"String error. SearchableAppList focuses on wrong search input, specified by a string. ",89.0
