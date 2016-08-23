@@ -1,3 +1,5 @@
+/* @flow */
+
 /*
 	content/search.js
 	Copyright © 2009, 2011  WOT Services Oy <info@mywot.com>
@@ -17,6 +19,17 @@
 	You should have received a copy of the GNU General Public License
 	along with WOT. If not, see <http://www.gnu.org/licenses/>.
 */
+
+interface a {
+    matchruleurl(rule: Object, url: string): bool;
+    search: any;
+    log: any;
+    searchtypes: any;
+                 post:any;
+                      bind:any;
+}
+
+var wot:a = {};
 
 wot.search = {
 	added: {},
