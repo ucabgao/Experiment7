@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+webcredits/webcredits,6,b725e6e25b801157842a53a4fce4eadf3c075de7,TypeScript,Detectable,"Reference error: TypeScript is able to detect that coinbaseSql hasn't been defined.",76.0
