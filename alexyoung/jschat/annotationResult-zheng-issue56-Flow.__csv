@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+alexyoung/jschat,56,f0f2b15a6433645074c130ae35367b5a1253b5df,Flow,Undetectable,"Regex/Parsing error: wrongly recognize http://www.moongift.jp/2009/06/jschat as an image",35.0
