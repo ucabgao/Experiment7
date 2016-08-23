@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+mywot/opera,6,87e7d5bb22764020468de7a41b5e649ba00dbc70,TypeScript,Detectable,"TypeScript is also able to detect an arity problem.",97.0
