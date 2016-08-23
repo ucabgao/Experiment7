@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+/* @flow */
+
+// #!/usr/bin/env node
 
 // requires
 var Sequelize = require('sequelize');
