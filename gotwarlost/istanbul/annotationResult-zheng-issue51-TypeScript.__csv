@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+gotwarlost/istanbul,51,5a4d9b37b774992a1cc223b529cd301a97267261,TypeScript,Undetectable,"EIS: typical absolute and relative path confusion, opaque to static typing.",49.0
