@@ -4,30 +4,30 @@
     textlint-core.js is a class
     textlint.js is a singleton object that is instance of textlint-core.js.
  */
-const Promise = require("bluebird");
-const TraverseController = require('txt-ast-traverse').Controller;
-const traverseController = new TraverseController();
-const path = require('path');
-const fs = require('fs');
-const assert = require('assert');
-const RuleContext = require('./rule/rule-context');
-const RuleContextAgent = require("./rule/rule-context-agent");
-const debug = require('debug')('textlint:core');
-const timing = require("./util/timing");
-import {getProcessorMatchExtension} from "./util/proccesor-helper";
-import {Processor as MarkdownProcessor} from "textlint-plugin-markdown";
-import {Processor as TextProcessor} from "textlint-plugin-text";
+var Promise = require("bluebird");
+var TraverseController = require('txt-ast-traverse').Controller;
+var traverseController = new TraverseController();
+var path = require('path');
+var fs = require('fs');
+var assert = require('assert');
+var RuleContext = require('./rule/rule-context');
+var RuleContextAgent = require("./rule/rule-context-agent");
+var debug = require('debug')('textlint:core');
+var timing = require("./util/timing");
+var proccesor_helper_1 = require("./util/proccesor-helper");
+var textlint_plugin_markdown_1 = require("textlint-plugin-markdown");
+var textlint_plugin_text_1 = require("textlint-plugin-text");
 // add all the node types as listeners
 function addListenRule(key, rule, target) {
-    Object.keys(rule).forEach(nodeType => {
+    Object.keys(rule).forEach(function (nodeType) {
         target.on(nodeType, timing.enabled
             ? timing.time(key, rule[nodeType])
             : rule[nodeType]);
     });
 }
-
-export default class TextlintCore {
-    constructor(config = {}) {
+var TextlintCore = (function () {
+    function TextlintCore(config) {
+        if (config === void 0) { config = {}; }
         // this.config often is undefined.
         this.config = config;
         this.rules = {};
@@ -35,106 +35,102 @@ export default class TextlintCore {
         // FIXME: in the future, this.processors is empty by default.
         // Markdown and Text are for backward compatibility.
         this.processors = [
-            new MarkdownProcessor(config),
-            new TextProcessor(config)
+            new textlint_plugin_markdown_1.Processor(config),
+            new textlint_plugin_text_1.Processor(config)
         ];
     }
-
     // unstable API
-    addProcessor(Processtor) {
+    TextlintCore.prototype.addProcessor = function (Processtor) {
         // add first
         this.processors.unshift(new Processtor(this.config));
-    }
-
+    };
     /**
      * Register rules to EventEmitter.
      * if want to release rules, please call {@link this.resetRules}.
      * @param {object} rules rule objects array
      * @param {object} [rulesConfig] ruleConfig is object
      */
-    setupRules(rules = {}, rulesConfig = {}) {
-        const ignoreDisableRules = (rules) => {
-            let resultRules = Object.create(null);
-            Object.keys(rules).forEach(key => {
-                const ruleCreator = rules[key];
+    TextlintCore.prototype.setupRules = function (rules, rulesConfig) {
+        if (rules === void 0) { rules = {}; }
+        if (rulesConfig === void 0) { rulesConfig = {}; }
+        var ignoreDisableRules = function (rules) {
+            var resultRules = Object.create(null);
+            Object.keys(rules).forEach(function (key) {
+                var ruleCreator = rules[key];
                 if (typeof ruleCreator !== 'function') {
-                    throw new Error(`Definition for rule '${ key }' was not found.`);
+                    throw new Error("Definition for rule '" + key + "' was not found.");
                 }
                 // "rule-name" : false => disable
-                const ruleConfig = rulesConfig && rulesConfig[key];
+                var ruleConfig = rulesConfig && rulesConfig[key];
                 if (ruleConfig !== false) {
                     debug('use "%s" rule', key);
                     resultRules[key] = rules[key];
                 }
-
             });
             return resultRules;
         };
         this.rules = ignoreDisableRules(rules);
         this.rulesConfig = rulesConfig;
-    }
-
-    _createRuleContextAgent(text, filePath) {
-        const rules = this.rules;
-        let ruleContextAgent = new RuleContextAgent(text, filePath);
-        Object.keys(rules).forEach(key => {
-            const ruleCreator = rules[key];
-            const ruleConfig = this.rulesConfig[key];
+    };
+    TextlintCore.prototype._createRuleContextAgent = function (text, filePath) {
+        var _this = this;
+        var rules = this.rules;
+        var ruleContextAgent = new RuleContextAgent(text, filePath);
+        Object.keys(rules).forEach(function (key) {
+            var ruleCreator = rules[key];
+            var ruleConfig = _this.rulesConfig[key];
             try {
-                let ruleContext = new RuleContext(key, ruleContextAgent, this.config, ruleConfig);
-                let rule = ruleCreator(ruleContext, ruleConfig);
+                var ruleContext = new RuleContext(key, ruleContextAgent, _this.config, ruleConfig);
+                var rule = ruleCreator(ruleContext, ruleConfig);
                 addListenRule(key, rule, ruleContextAgent);
-            } catch (ex) {
-                ex.message = `Error while loading rule '${ key }': ${ ex.message }`;
+            }
+            catch (ex) {
+                ex.message = "Error while loading rule '" + key + "': " + ex.message;
                 throw ex;
             }
         });
         return ruleContextAgent;
-    }
-
+    };
     /**
      * Remove all registered rule and clear messages.
      */
-    resetRules() {
+    TextlintCore.prototype.resetRules = function () {
         // noop
-    }
-
-    _lintByProcessor(processor, text, ext, filePath) {
-        assert(processor, `processor is not found for ${ext}`);
-        const {preProcess, postProcess} = processor.processor(ext);
-        assert(typeof preProcess === "function" && typeof postProcess === "function",
-            `processor should implement {preProcess, postProcess}`);
-        const ast = preProcess(text, filePath);
-        let promiseQueue = [];
-        const ruleContextAgent = this._createRuleContextAgent(text, filePath);
+    };
+    TextlintCore.prototype._lintByProcessor = function (processor, text, ext, filePath) {
+        assert(processor, "processor is not found for " + ext);
+        var _a = processor.processor(ext), preProcess = _a.preProcess, postProcess = _a.postProcess;
+        assert(typeof preProcess === "function" && typeof postProcess === "function", "processor should implement {preProcess, postProcess}");
+        var ast = preProcess(text, filePath);
+        var promiseQueue = [];
+        var ruleContextAgent = this._createRuleContextAgent(text, filePath);
         traverseController.traverse(ast, {
-            enter(node, parent) {
-                const type = node.type;
-                Object.defineProperty(node, 'parent', {value: parent});
+            enter: function (node, parent) {
+                var type = node.type;
+                Object.defineProperty(node, 'parent', { value: parent });
                 if (ruleContextAgent.listenerCount(type) > 0) {
-                    let promise = ruleContextAgent.emit(type, node);
+                    var promise = ruleContextAgent.emit(type, node);
                     promiseQueue.push(promise);
                 }
             },
-            leave(node) {
-                const type = `${node.type}:exit`;
+            leave: function (node) {
+                var type = node.type + ":exit";
                 if (ruleContextAgent.listenerCount(type) > 0) {
-                    let promise = ruleContextAgent.emit(type, node);
+                    var promise = ruleContextAgent.emit(type, node);
                     promiseQueue.push(promise);
                 }
             }
         });
-        return Promise.all(promiseQueue).then(() => {
-            let messages = ruleContextAgent.messages;
-            let result = postProcess(messages, filePath);
+        return Promise.all(promiseQueue).then(function () {
+            var messages = ruleContextAgent.messages;
+            var result = postProcess(messages, filePath);
             if (result.filePath == null) {
-                result.filePath = `<Unkown${ext}>`;
+                result.filePath = "<Unkown" + ext + ">";
             }
             assert(result.filePath && result.messages.length >= 0, "postProcess should return { messages, filePath } ");
             return result;
         });
-    }
-
+    };
     /**
      * lint text by registered rules.
      * The result contains target filePath and error messages.
@@ -142,33 +138,35 @@ export default class TextlintCore {
      * @param {string} ext ext is extension. default: .txt
      * @returns {TextLintResult}
      */
-    lintText(text, ext = ".txt") {
-        const processor = getProcessorMatchExtension(this.processors, ext);
+    TextlintCore.prototype.lintText = function (text, ext) {
+        if (ext === void 0) { ext = ".txt"; }
+        var processor = proccesor_helper_1.getProcessorMatchExtension(this.processors, ext);
         return this._lintByProcessor(processor, text, ext);
-    }
-
+    };
     /**
      * lint markdown text by registered rules.
      * The result contains target filePath and error messages.
      * @param {string} text markdown format text
      * @returns {TextLintResult}
      */
-    lintMarkdown(text) {
-        const ext = ".md";
-        const processor = getProcessorMatchExtension(this.processors, ext);
+    TextlintCore.prototype.lintMarkdown = function (text) {
+        var ext = ".md";
+        var processor = proccesor_helper_1.getProcessorMatchExtension(this.processors, ext);
         return this._lintByProcessor(processor, text, ext);
-    }
-
+    };
     /**
      * lint file and return result object
      * @param {string} filePath
      * @returns {TextLintResult} result
      */
-    lintFile(filePath) {
-        const absoluteFilePath = path.resolve(process.cwd(), filePath);
-        const ext = path.extname(absoluteFilePath);
-        const text = fs.readFileSync(absoluteFilePath, 'utf-8');
-        const processor = getProcessorMatchExtension(this.processors, ext);
+    TextlintCore.prototype.lintFile = function (filePath) {
+        var absoluteFilePath = path.resolve(process.cwd(), filePath);
+        var ext = path.extname(absoluteFilePath);
+        var text = fs.readFileSync(absoluteFilePath, 'utf-8');
+        var processor = proccesor_helper_1.getProcessorMatchExtension(this.processors, ext);
         return this._lintByProcessor(processor, text, ext, absoluteFilePath);
-    }
-}
+    };
+    return TextlintCore;
+}());
+exports.__esModule = true;
+exports["default"] = TextlintCore;
