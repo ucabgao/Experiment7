@@ -1,3 +1,5 @@
+/* @flow */ 
+
 import Ember from 'ember';
 import AupacTypeahead from './aupac-typeahead';
 import suggestionTemplate from '../templates/components/aupac-ember-data-typeahead/suggestion';
