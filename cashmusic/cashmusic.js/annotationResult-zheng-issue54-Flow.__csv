@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+cashmusic/cashmusic.js,54,952ab77d61755ff227db515d288cfcdab3269695,Flow,Undetectable,"String errors: wrong url of type string.",47.0
