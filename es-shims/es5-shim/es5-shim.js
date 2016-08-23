@@ -1,3 +1,5 @@
+/* @flow */
+
 /*!
  * https://github.com/es-shims/es5-shim
  * @license es5-shim Copyright 2009-2015 by contributors, MIT License
@@ -43,7 +45,7 @@
 // functions.
 var $Array = Array;
 var ArrayPrototype = $Array.prototype;
-var $Object = Object;
+var $Object:Object = Object;
 var ObjectPrototype = $Object.prototype;
 var FunctionPrototype = Function.prototype;
 var $String = String;
@@ -1081,7 +1083,7 @@ if (doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
         // Date.length === 7
         var DateShim = function Date(Y, M, D, h, m, s, ms) {
             var length = arguments.length;
-            var date;
+            var date: Object | number;
             if (this instanceof NativeDate) {
                 date = length === 1 && $String(Y) === Y ? // isString(Y)
                     // We explicitly pass it through parse:
