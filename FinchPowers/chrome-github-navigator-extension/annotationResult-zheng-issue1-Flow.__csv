@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+FinchPowers/chrome-github-navigator-extension,1,9456cdd4b06d2dd3cdd78d8d2387fe3305b3eb13,Flow,Undetectable,"EIS: clikcing on an image doesn't load.",79.0
