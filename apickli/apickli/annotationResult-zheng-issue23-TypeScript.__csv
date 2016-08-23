@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+apickli/apickli,23,a980b0a31d27020c4b4d87c15f05921cccc09404,TypeScript,Undetectable,"EIS: Wrongly reacts on the case when API repsonse is 302,",23.0
