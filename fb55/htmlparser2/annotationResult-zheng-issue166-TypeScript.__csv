@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+fb55/htmlparser2,166,be1ff7b3a73c81dc15026fbefb70c54f81c8d95b,TypeScript,Undetectable,"Branch error: branches in wrong order, which causes the program to fail to work in a case when the special ends with a '<'.",15.0
