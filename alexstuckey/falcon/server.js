@@ -1,3 +1,5 @@
+/* @flow */
+
 var amqp = require('amqp');
 var fs = require('fs');
 var onMessage = require('./onMessage.js');
