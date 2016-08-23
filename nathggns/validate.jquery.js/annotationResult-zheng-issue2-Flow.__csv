@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+nathggns/validate.jquery.js,2,34334e0354411ce1bbd0524db88a5178910f6b7d,Flow,Undetectable,"EIS: Forgot to prevent urther event handlers from being triggered",50.0
