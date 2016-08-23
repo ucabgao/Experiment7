@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+Derpthemeus/ChampionMasteryLookup,2,238b09a31fb07fec2f932f080d39f6905a2eac7a,TypeScript,Undetectable,"EIS. When searching people, it should move someone down a spot on the high score list, instead it just overwrites the previous person that was at that spot.",38.0
