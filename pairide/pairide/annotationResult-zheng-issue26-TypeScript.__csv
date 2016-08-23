@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+pairide/pairide,26,b074c12a79fda274fd843cd25965962077cb1f20,TypeScript,Undetectable,"EIS: socket.io doesn't clean up the room on refreshing",42.0
