@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+mapbox/cfn-config,14,0baa631618ebbb5692b3ff33cad35246aca7e073,TypeScript,Undetectable,"Missing predicate: forgot to check whether the stack already exists before deletion.",55.0
