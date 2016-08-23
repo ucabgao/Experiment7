@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+wiseguydigital/jquery-keyframescroller,1,1df5654839bf79b1ca797938e85afd7ea9317d4c,Flow,Detectable,"Flow is able to detect that keyframeScroll hasn't been defined",54.0

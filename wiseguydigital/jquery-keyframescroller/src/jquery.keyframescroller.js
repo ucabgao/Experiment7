@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * keyframescroller.js v1.0
  * https://github.com/wiseguydigital/jquery-keyframescroller
