@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+phetsims/making-tens,23,c2b7353ba70f67d9de6677181755aab5f94648b6,Flow,Undetectable,"UI errors: there are white boxes with outlines where there should be numbers. ",68.0
