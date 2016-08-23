@@ -1,9 +1,16 @@
+/* @flow */
+
 // LICENSE : MIT
 'use strict';
 /*
     textlint-core.js is a class
     textlint.js is a singleton object that is instance of textlint-core.js.
  */
+
+interface a {
+    listenerCount: ?Object;
+}
+
 const Promise = require("bluebird");
 const TraverseController = require('txt-ast-traverse').Controller;
 const traverseController = new TraverseController();
@@ -106,7 +113,7 @@ export default class TextlintCore {
             `processor should implement {preProcess, postProcess}`);
         const ast = preProcess(text, filePath);
         let promiseQueue = [];
-        const ruleContextAgent = this._createRuleContextAgent(text, filePath);
+        const ruleContextAgent: a = this._createRuleContextAgent(text, filePath);
         traverseController.traverse(ast, {
             enter(node, parent) {
                 const type = node.type;
