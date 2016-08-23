@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+impronunciable/hackdash,113,63ebd5e14db323f5e08f81f2fe39c9fa395c02d1,TypeScript,Undetectable,"Nullability: TypeScript cannot detect the type error when a null is added to a string",73.0
