@@ -1,4 +1,4 @@
-
+/* @flow */
 /*!
  * Connect - access-control
  * Copyright(c) 2011 Nicolas Chambrier
