@@ -1,0 +1,2 @@
+Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
+tkem/mopidy-mobile,153,77fcd5f3a6a16c7cda9952ae88fe270c9c50ab31,Flow,Undetectable,"EIS: Forgot to use angular.copy() http://stackoverflow.com/questions/33043850/why-and-when-to-use-angular-copy-deep-copy",146.0
