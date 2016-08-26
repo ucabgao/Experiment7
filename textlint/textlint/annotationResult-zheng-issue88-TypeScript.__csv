@@ -1,2 +1,3 @@
 Project,Issue,Commit,TypeChecker,Detectable,Comment,AnnotationTime
 textlint/textlint,88,31b3b5edfd8ba7b8245a26ec4b5d82264dbdbd06,TypeScript,Detectable,"TypeScript is also able to detect it.",154.0
+textlint/textlint,88,31b3b5edfd8ba7b8245a26ec4b5d82264dbdbd06,TypeScript,Detectable,"Revising annotations.",298.0

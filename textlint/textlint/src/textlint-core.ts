@@ -1,8 +1,12 @@
 // LICENSE : MIT
 'use strict';
 
+type f = (x:any) => any;
+
 interface a {
-listenerCount: {} | undefined;
+listenerCount: f | undefined;
+messages:any;
+emit:any;
 }
 
 /*
